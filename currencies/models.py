@@ -19,6 +19,7 @@ class Currency(models.Model):
         help_text=_('Make this the base currency against which rates are calculated.'))
     is_default = models.BooleanField(_('default'), default=False,
         help_text=_('Make this the default user currency.'))
+    last_updated = models.DateTimeField(null=True, blank=True)
 
     objects = CurrencyManager()
 

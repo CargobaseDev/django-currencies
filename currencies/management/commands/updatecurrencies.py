@@ -44,6 +44,7 @@ class Command(NoArgsCommand):
 			if currency.factor != rate:
 				print("Updating %s rate to %f" % (currency, rate))
 				currency.factor = rate
+				currency.last_updated = datetime.fromtimestamp(d["timestamp"])
 				currency.save()
 				i += 1
 
