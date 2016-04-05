@@ -30,6 +30,7 @@ class Command(NoArgsCommand):
 			try:
 				base = Currency.objects.get(code=d["base"])
 				base.is_base = True
+				base.last_updated = datetime.fromtimestamp(d["timestamp"])
 				base.save()
 			except Currency.DoesNotExist:
 				print("Warning: Base currency %r does not exist! Rates will be erroneous without it." % (d["base"]))
