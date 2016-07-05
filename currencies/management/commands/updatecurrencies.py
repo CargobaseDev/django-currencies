@@ -62,4 +62,4 @@ class Command(NoArgsCommand):
                 if self.verbose >= 1:
                     self.stdout.write("Updating %s rate to %f" % (c, factor))
 
-                C._default_manager.filter(pk=c.pk).update(factor=factor)
+                C._default_manager.filter(pk=c.pk).update(factor=factor, last_updated=d.fromtimestamp(l["timestamp"]))
