@@ -58,8 +58,7 @@ class Command(NoArgsCommand):
                 continue
 
             factor = D(l["rates"][c.code]).quantize(D(".0001"))
-            if c.factor != factor:
-                if self.verbose >= 1:
-                    self.stdout.write("Updating %s rate to %f" % (c, factor))
+            if self.verbose >= 1:
+                self.stdout.write("Updating %s rate to %f" % (c, factor))
 
-                C._default_manager.filter(pk=c.pk).update(factor=factor, last_updated=d.fromtimestamp(l["timestamp"]))
+            C._default_manager.filter(pk=c.pk).update(factor=factor, last_updated=d.fromtimestamp(l["timestamp"]))
