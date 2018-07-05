@@ -57,7 +57,7 @@ class Command(NoArgsCommand):
                 self.stderr.write("Could not find rates for %s (%s)" % (c, c.code))
                 continue
 
-            factor = D(l["rates"][c.code]).quantize(D(".0001"))
+            factor = D(l["rates"][c.code]).quantize(D(".000001"))
             if self.verbose >= 1:
                 self.stdout.write("Updating %s rate to %f" % (c, factor))
 
