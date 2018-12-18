@@ -4,7 +4,7 @@ from decimal import Decimal
 from urllib.request import urlopen
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.management.base import CommandError, NoArgsCommand
+from django.core.management.base import CommandError, BaseCommand
 from currencies.models import Currency
 
 OPENEXCHANGERATES_APP_ID = getattr(settings, "OPENEXCHANGERATES_APP_ID", None)
@@ -14,10 +14,10 @@ if not OPENEXCHANGERATES_APP_ID:
 CURRENCY_API_URL = "http://openexchangerates.org/latest.json?app_id=%s" % (OPENEXCHANGERATES_APP_ID)
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
 	help = "Update the currencies against the current exchange rates"
 
-	def handle_noargs(self, **options):
+	def handle(self, *args, **options):
 		print("Querying currencies at %s" % (CURRENCY_API_URL))
 		api = urlopen(CURRENCY_API_URL)
 		d = json.loads(api.read().decode('utf-8'))
