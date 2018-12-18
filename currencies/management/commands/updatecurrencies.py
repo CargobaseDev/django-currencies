@@ -4,9 +4,8 @@ from decimal import Decimal as D
 from datetime import datetime as d
 
 from django.conf import settings
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.core.exceptions import ImproperlyConfigured
-
 from openexchangerates import OpenExchangeRatesClient
 
 from ...models import Currency as C
@@ -17,7 +16,7 @@ if APP_ID is None:
         "You need to set the 'OPENEXCHANGERATES_APP_ID' setting to your openexchangerates.org api key")
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Update the currencies against the current exchange rates"
 
     def handle(self, *args, **options):
