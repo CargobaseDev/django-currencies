@@ -51,12 +51,23 @@ class Command(BaseCommand):
                 base.last_updated = d.fromtimestamp(l["timestamp"])
                 base.save()
 
+        exception_currencies = {
+            # eg: NMP will be mapped to MXN
+            'NMP': 'MXN',
+            'BYR': 'BYN'
+        }
+
         for c in C._default_manager.all():
-            if c.code not in l["rates"]:
+            if c.code in exception_currencies:
+                mapped_currency = exception_currencies[c.code]
+                factor = D(l["rates"][mapped_currency]).quantize(D(".000001"))
+
+            elif c.code not in l["rates"] and c.code not in exception_currencies:
                 self.stderr.write("Could not find rates for %s (%s)" % (c, c.code))
                 continue
+            else:
+              factor = D(l["rates"][c.code]).quantize(D(".000001"))
 
-            factor = D(l["rates"][c.code]).quantize(D(".000001"))
             if self.verbose >= 1:
                 self.stdout.write("Updating %s rate to %f" % (c, factor))
 
