@@ -54,7 +54,8 @@ class Command(BaseCommand):
         exception_currencies = {
             # eg: NMP will be mapped to MXN
             'NMP': 'MXN',
-            'BYR': 'BYN'
+            'BYR': 'BYN',
+            'RMB': 'CNY'
         }
 
         for c in C._default_manager.all():
