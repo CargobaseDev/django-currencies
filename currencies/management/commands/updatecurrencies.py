@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 
 from decimal import Decimal as D
 from datetime import datetime as d
@@ -33,7 +34,7 @@ class Command(BaseCommand):
             code = 'USD'  # fallback to default
 
         l = client.latest(base=code)
-        timestamp = None
+        timestamp = int(time.time()) # default to current timestamp
 
         # get timestamp from response
         if "timestamp" in l:
