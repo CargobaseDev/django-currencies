@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 
 from decimal import Decimal as D
 from datetime import datetime as d
@@ -33,10 +34,16 @@ class Command(BaseCommand):
             code = 'USD'  # fallback to default
 
         l = client.latest(base=code)
+        timestamp = int(time.time()) # default to current timestamp
 
-        if self.verbose >= 1 and "timestamp" in l:
+        # get timestamp from response
+        if "timestamp" in l:
+            # convert timestamp to integer, fix for python 3.11 compatibility
+            timestamp = int(l["timestamp"])
+
+        if self.verbose >= 1 and timestamp:
             self.stdout.write("Rates last updated on %s" % (
-                d.fromtimestamp(l["timestamp"]).strftime("%Y-%m-%d %H:%M:%S")))
+                d.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")))
 
         if "base" in l:
             if self.verbose >= 1:
@@ -48,7 +55,7 @@ class Command(BaseCommand):
             else:
                 base = C._default_manager.get(code=l["base"])
                 base.is_base = True
-                base.last_updated = d.fromtimestamp(l["timestamp"])
+                base.last_updated = d.fromtimestamp(timestamp)
                 base.save()
 
         exception_currencies = {
@@ -72,4 +79,4 @@ class Command(BaseCommand):
             if self.verbose >= 1:
                 self.stdout.write("Updating %s rate to %f" % (c, factor))
 
-            C._default_manager.filter(pk=c.pk).update(factor=factor, last_updated=d.fromtimestamp(l["timestamp"]))
+            C._default_manager.filter(pk=c.pk).update(factor=factor, last_updated=d.fromtimestamp(timestamp))
